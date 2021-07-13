@@ -9,12 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@sanity/block-content-to-react": "^3.0.0",
     "@sanity/client": "^2.11.0",
     "date-fns": "^2.22.1",
     "next": "11.0.1",
     "next-sanity": "^0.3.0",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "react-portable-text": "^0.3.0"
   },
   "devDependencies": {
     "autoprefixer": "^10.3.0",
