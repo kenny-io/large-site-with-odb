@@ -2,16 +2,7 @@ import { groq } from "next-sanity";
 import { usePreviewSubscription, urlFor } from "../../lib/sanity";
 import { getClient } from "../../lib/sanity.server";
 
-const postQuery = groq`
-  *[_type == "docs" && slug.current == $slug][0] {
-    _id,
-    title,
-    body,
-    "slug": slug.current
-  }
-`;
-
-export default function ReadPost({ data, preview }) {
+export default function ReadDoc({ data, preview }) {
   const { data: docs } = usePreviewSubscription(postQuery, {
     params: { slug: data.docs?.slug },
     initialData: data.docs,
@@ -28,6 +19,15 @@ export default function ReadPost({ data, preview }) {
     </article>
   );
 }
+
+const postQuery = groq`
+  *[_type == "docs" && slug.current == $slug][0] {
+    _id,
+    title,
+    body,
+    "slug": slug.current
+  }
+`;
 
 export async function getStaticProps({ params, preview = false }) {
   const docs = await getClient(preview).fetch(postQuery, {
@@ -49,6 +49,6 @@ export async function getStaticPaths() {
 
   return {
     paths: paths.map((slug) => ({ params: { slug } })),
-    fallback: true,
+    fallback: false,
   };
 }

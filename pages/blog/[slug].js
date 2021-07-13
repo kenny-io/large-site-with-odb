@@ -1,35 +1,21 @@
-import ErrorPage from "next/error";
-import { useRouter } from "next/router";
+// import ErrorPage from "next/error";
+// import { useRouter } from "next/router";
 import { groq } from "next-sanity";
 import { usePreviewSubscription, urlFor } from "../../lib/sanity";
 import { getClient } from "../../lib/sanity.server";
-const BlockContent = require("@sanity/block-content-to-react");
+// const BlockContent = require("@sanity/block-content-to-react");
 // import PortableText from "react-portable-text";
 // import { serializers } from "@sanity/block-content-to-react/lib/targets/dom";
 
-const postQuery = groq`
-  *[_type == "post" && slug.current == $slug][0] {
-    _id,
-    title,
-    body,
-    mainImage,
-    categories[]->{
-      _id,
-      title
-    },
-    "slug": slug.current
-  }
-`;
-
-const serializers = {
-  types: {
-    body: (props) => (
-      <pre data-language={props.node.language}>
-        <code>{props.node.code}</code>
-      </pre>
-    ),
-  },
-};
+// const serializers = {
+//   types: {
+//     body: (props) => (
+//       <pre data-language={props.node.language}>
+//         <code>{props.node.code}</code>
+//       </pre>
+//     ),
+//   },
+// };
 
 export default function ReadPost({ data, preview }) {
   // const router = useRouter();
@@ -61,6 +47,20 @@ export default function ReadPost({ data, preview }) {
   );
 }
 
+const postQuery = groq`
+  *[_type == "post" && slug.current == $slug][0] {
+    _id,
+    title,
+    body,
+    mainImage,
+    categories[]->{
+      _id,
+      title
+    },
+    "slug": slug.current
+  }
+`;
+
 export async function getStaticProps({ params, preview = false }) {
   const post = await getClient(preview).fetch(postQuery, {
     slug: params.slug,
@@ -81,6 +81,6 @@ export async function getStaticPaths() {
 
   return {
     paths: paths.map((slug) => ({ params: { slug } })),
-    fallback: true,
+    fallback: false,
   };
 }

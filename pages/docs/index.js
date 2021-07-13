@@ -1,6 +1,6 @@
 import Head from "next/head";
 // import client from "../../client";
-import { format } from "date-fns";
+// import { format } from "date-fns";
 import { groq } from "next-sanity";
 import { usePreviewSubscription, urlFor, PortableText } from "../../lib/sanity";
 import { getClient } from "../../lib/sanity.server";
@@ -26,7 +26,7 @@ export default function Docs({ data, preview }) {
           <p className="lg:w-2/3 mx-auto leading-relaxed text-base">
             Whatever cardigan tote bag tumblr hexagon brooklyn asymmetrical
             gentrify, subway tile poke farm-to-table. Franzen you probably
-            haven't heard of them man bun deep jianbing selfies heirloom prism
+            havent heard of them man bun deep jianbing selfies heirloom prism
             food truck ugh squid celiac humblebrag.
           </p>
         </div>
@@ -63,9 +63,7 @@ export default function Docs({ data, preview }) {
   );
 }
 
-const postQuery = groq`
-  *[_type == "docs"]
-`;
+const postQuery = groq` *[_type == "docs"]`;
 
 export async function getStaticProps({ preview = false }) {
   const docs = await getClient(preview).fetch(postQuery);
