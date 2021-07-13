@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function Header() {
   return (
     <div className="min-h-screen bg-gray-900 py-6 flex flex-col justify-center sm:py-12">
@@ -7,9 +9,12 @@ export default function Header() {
         <div className="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-20">
           <div className="max-w-md mx-auto">
             <div>
-              <img
+              <Image
                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvcScFQoVMwuFx_3cSqJ_l5QC1FE9EpkLo6g&usqp=CAU"
+                height="40px"
+                width="50px"
                 className="h-7 sm:h-8"
+                alt="logo"
               />
             </div>
             <div className="divide-y divide-gray-200">
