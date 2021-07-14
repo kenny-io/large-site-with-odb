@@ -33,7 +33,9 @@ export default function Post({ data, preview }) {
                     {blogpost.title}
                   </h2>
                   <p className="leading-relaxed">{blogpost.excerpt}</p>
-                  <Link href={urlFor("post", { slug: blogpost.slug.current })}>
+                  <Link
+                    href={`/blog/${encodeURIComponent(blogpost.slug.current)}`}
+                  >
                     <a className="text-green-500 inline-flex items-center mt-4">
                       {/* <nuxt-link :to="`/blog/${post.slug}`"> Read More </nuxt-link> */}
                       <svg
@@ -63,10 +65,6 @@ export default function Post({ data, preview }) {
 const postQuery = groq`
   *[_type == "post"]
 `;
-
-const formatDate = () => {
-  return format(new Date(), "dd MMM yyyy");
-};
 
 export async function getStaticProps({ preview = false }) {
   const post = await getClient(preview).fetch(postQuery);
