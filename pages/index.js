@@ -3,6 +3,8 @@ import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import Header from "../components/Header";
 import Nav from "../components/Nav";
+import Features from "../components/Features";
+import Testimonials from "../components/Testimonials";
 
 export default function Home({ data }) {
   return (
@@ -13,9 +15,11 @@ export default function Home({ data }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header />
-      <main className={styles.main}>
+      <Features />
+      <Testimonials />
+      {/* <main className={styles.main}>
         <div>{data.map((product) => product.title)}</div>
-      </main>
+      </main> */}
     </div>
   );
 }
