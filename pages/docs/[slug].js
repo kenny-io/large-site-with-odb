@@ -32,19 +32,22 @@ export async function getStaticPaths() {
     groq`*[_type == "docs" && defined(slug.current)][].slug.current`
   );
 
+  // Generating only the first path so that I can generate the rest on-demand with ODB
+  const firstDoc = paths[0];
+
   return {
-    paths: paths.map((slug) => ({ params: { slug } })),
+    // paths: paths.map((slug) => ({ params: { slug } })),
+    paths: [{ params: { slug: firstDoc } }],
     fallback: true,
   };
 }
-export async function getStaticProps({ params, preview = false }) {
-  const docs = await getClient(preview).fetch(postQuery, {
+export async function getStaticProps({ params }) {
+  const docs = await getClient().fetch(postQuery, {
     slug: params.slug,
   });
 
   return {
     props: {
-      preview,
       data: { docs },
     },
   };
