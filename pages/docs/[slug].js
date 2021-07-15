@@ -1,21 +1,20 @@
 import { groq } from "next-sanity";
-import { usePreviewSubscription, urlFor } from "../../lib/sanity";
 import { getClient } from "../../lib/sanity.server";
+import { useRouter } from "next/router";
 
-export default function ReadDoc({ data, preview }) {
-  const { data: docs } = usePreviewSubscription(postQuery, {
-    params: { slug: data.docs?.slug },
-    initialData: data.docs,
-    enabled: preview && data.docs?.slug,
-  });
+export default function ReadDoc({ data }) {
+  const router = useRouter();
+  const { docs } = data;
 
-  const { title, body } = docs;
+  if (router.isFallback) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <article>
-      <h2>{title}</h2>
+      <h2>{docs.title}</h2>
       <br />
-      <p>{body}</p>
+      <p>{docs.body}</p>
     </article>
   );
 }
@@ -29,6 +28,16 @@ const postQuery = groq`
   }
 `;
 
+export async function getStaticPaths() {
+  const paths = await getClient().fetch(
+    groq`*[_type == "docs" && defined(slug.current)][].slug.current`
+  );
+
+  return {
+    paths: paths.map((slug) => ({ params: { slug } })),
+    fallback: "blocking",
+  };
+}
 export async function getStaticProps({ params, preview = false }) {
   const docs = await getClient(preview).fetch(postQuery, {
     slug: params.slug,
@@ -39,16 +48,5 @@ export async function getStaticProps({ params, preview = false }) {
       preview,
       data: { docs },
     },
-  };
-}
-
-export async function getStaticPaths() {
-  const paths = await getClient().fetch(
-    groq`*[_type == "docs" && defined(slug.current)][].slug.current`
-  );
-
-  return {
-    paths: paths.map((slug) => ({ params: { slug } })),
-    fallback: false,
   };
 }
