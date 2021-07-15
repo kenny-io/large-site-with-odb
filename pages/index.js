@@ -6,7 +6,7 @@ import Nav from "../components/Nav";
 import Features from "../components/Features";
 import Testimonials from "../components/Testimonials";
 
-export default function Home({ data }) {
+export default function Home() {
   return (
     <div>
       <Head>
@@ -17,19 +17,6 @@ export default function Home({ data }) {
       <Header />
       <Features />
       <Testimonials />
-      {/* <main className={styles.main}>
-        <div>{data.map((product) => product.title)}</div>
-      </main> */}
     </div>
   );
-}
-
-export async function getStaticProps() {
-  const response = await fetch("http://test.gasport.com.ng/API/OrderList");
-  const data = await response.json();
-  return {
-    props: {
-      data,
-    },
-  };
 }

@@ -1,14 +1,18 @@
 import { groq } from "next-sanity";
-import { usePreviewSubscription, urlFor } from "../../lib/sanity";
 import { getClient } from "../../lib/sanity.server";
+import { useRouter } from "next/router";
 import Image from "next/image";
 
-export default function ProductDetails({ data, preview }) {
-  const { data: product } = usePreviewSubscription(postQuery, {
-    params: { slug: data.product?.slug },
-    initialData: data.product,
-    enabled: preview && data.products?.slug,
-  });
+export default function ProductDetails({ data }) {
+  const router = useRouter();
+  const { product } = data;
+
+  console.log(router);
+  console.log(product);
+
+  if (router.isFallback) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <section className="text-gray-600 body-font overflow-hidden">
@@ -18,8 +22,8 @@ export default function ProductDetails({ data, preview }) {
             alt="ecommerce"
             className="lg:w-1/2 w-full lg:h-auto h-64 object-cover object-center rounded"
             src={product.imageUrl}
-            height={100}
-            width={100}
+            height={250}
+            width={400}
           />
           <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
             <h2 className="text-sm title-font text-gray-500 tracking-widest">
@@ -196,6 +200,16 @@ const postQuery = groq`
     "blurb": blurb.en
     }`;
 
+export async function getStaticPaths() {
+  const paths = await getClient().fetch(
+    groq`*[_type == "product" && defined(slug.current)][].slug.current`
+  );
+  return {
+    paths: paths.map((slug) => ({ params: { slug } })),
+    fallback: true,
+  };
+}
+
 export async function getStaticProps({ params, preview = false }) {
   const product = await getClient(preview).fetch(postQuery, {
     slug: params.slug,
@@ -206,16 +220,5 @@ export async function getStaticProps({ params, preview = false }) {
       preview,
       data: { product },
     },
-  };
-}
-
-export async function getStaticPaths() {
-  const paths = await getClient().fetch(
-    groq`*[_type == "product" && defined(slug.current)][].slug.current`
-  );
-
-  return {
-    paths: paths.map((slug) => ({ params: { slug } })),
-    fallback: false,
   };
 }
