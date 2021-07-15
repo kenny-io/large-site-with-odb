@@ -7,9 +7,6 @@ export default function ProductDetails({ data }) {
   const router = useRouter();
   const { product } = data;
 
-  console.log(router);
-  console.log(product);
-
   if (router.isFallback) {
     return <div>Loading...</div>;
   }
@@ -206,7 +203,7 @@ export async function getStaticPaths() {
   );
   return {
     paths: paths.map((slug) => ({ params: { slug } })),
-    fallback: true,
+    fallback: "blocking",
   };
 }
 
