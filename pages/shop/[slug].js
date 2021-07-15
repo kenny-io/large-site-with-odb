@@ -5,11 +5,11 @@ import Image from "next/image";
 
 export default function ProductDetails({ data }) {
   const router = useRouter();
-  const { product } = data;
 
   if (router.isFallback) {
     return <div>Loading...</div>;
   }
+  const { product } = data;
 
   return (
     <section className="text-gray-600 body-font overflow-hidden">
@@ -203,7 +203,7 @@ export async function getStaticPaths() {
   );
   return {
     paths: paths.map((slug) => ({ params: { slug } })),
-    fallback: "blocking",
+    fallback: true,
   };
 }
 
