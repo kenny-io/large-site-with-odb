@@ -60,7 +60,7 @@ export default function Shop({ data }) {
   );
 }
 
-const postQuery = groq`
+const query = groq`
   *[_type == "product"]{
         title,
         slug,
@@ -71,7 +71,7 @@ const postQuery = groq`
       }`;
 
 export async function getStaticProps() {
-  const products = await getClient().fetch(postQuery);
+  const products = await getClient().fetch(query);
 
   return {
     props: {
