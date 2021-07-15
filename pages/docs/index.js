@@ -1,15 +1,10 @@
 import Head from "next/head";
 import { groq } from "next-sanity";
-import { usePreviewSubscription, urlFor, PortableText } from "../../lib/sanity";
 import { getClient } from "../../lib/sanity.server";
 import Link from "next/link";
 
-export default function Docs({ data, preview }) {
-  const { data: docs } = usePreviewSubscription(postQuery, {
-    initialData: data.docs,
-    enabled: preview && data.docs?.slug,
-  });
-
+export default function Docs({ data }) {
+  const { docs } = data;
   return (
     <div>
       <Head>
@@ -72,12 +67,11 @@ export default function Docs({ data, preview }) {
 
 const postQuery = groq` *[_type == "docs"]`;
 
-export async function getStaticProps({ preview = false }) {
-  const docs = await getClient(preview).fetch(postQuery);
-  //   console.log(post);
+export async function getStaticProps() {
+  const docs = await getClient().fetch(postQuery);
+
   return {
     props: {
-      preview,
       data: { docs },
     },
   };
