@@ -2,14 +2,13 @@ import { useRouter } from "next/router";
 import { groq } from "next-sanity";
 import { getClient } from "../../lib/sanity.server";
 
-export default function ReadPost({ data, preview }) {
+export default function ReadPost({ data }) {
   const router = useRouter();
-  const { post } = data;
 
   if (router.isFallback) {
     return <div>Loading...</div>;
   }
-
+  const { post } = data;
   return (
     <article>
       <h2>{post.title}</h2>
@@ -40,7 +39,7 @@ export async function getStaticPaths() {
 
   return {
     paths: paths.map((slug) => ({ params: { slug } })),
-    fallback: "blocking",
+    fallback: true,
   };
 }
 

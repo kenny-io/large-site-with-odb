@@ -4,12 +4,11 @@ import { useRouter } from "next/router";
 
 export default function ReadDoc({ data }) {
   const router = useRouter();
-  const { docs } = data;
 
   if (router.isFallback) {
     return <div>Loading...</div>;
   }
-
+  const { docs } = data;
   return (
     <article>
       <h2>{docs.title}</h2>
@@ -35,7 +34,7 @@ export async function getStaticPaths() {
 
   return {
     paths: paths.map((slug) => ({ params: { slug } })),
-    fallback: "blocking",
+    fallback: true,
   };
 }
 export async function getStaticProps({ params, preview = false }) {
