@@ -6,8 +6,9 @@ export default function ReadDoc({ data }) {
   const router = useRouter();
 
   if (router.isFallback) {
-    return <div>Loading...</div>;
+    return <p>Loading...</p>;
   }
+
   const { docs } = data;
   return (
     <article>
@@ -32,19 +33,21 @@ export async function getStaticPaths() {
     groq`*[_type == "docs" && defined(slug.current)][].slug.current`
   );
 
+  const firstDoc = paths[0];
+
   return {
-    paths: paths.map((slug) => ({ params: { slug } })),
+    // paths: paths.map((slug) => ({ params: { slug } })),
+    paths: [{ params: { slug: firstDoc } }],
     fallback: true,
   };
 }
-export async function getStaticProps({ params, preview = false }) {
-  const docs = await getClient(preview).fetch(postQuery, {
+export async function getStaticProps({ params }) {
+  const docs = await getClient().fetch(postQuery, {
     slug: params.slug,
   });
 
   return {
     props: {
-      preview,
       data: { docs },
     },
   };

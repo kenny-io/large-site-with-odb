@@ -201,20 +201,23 @@ export async function getStaticPaths() {
   const paths = await getClient().fetch(
     groq`*[_type == "product" && defined(slug.current)][].slug.current`
   );
+
+  const firstProduct = paths[0];
+
   return {
-    paths: paths.map((slug) => ({ params: { slug } })),
+    // paths: paths.map((slug) => ({ params: { slug } })),
+    paths: [{ params: { slug: firstProduct } }],
     fallback: true,
   };
 }
 
-export async function getStaticProps({ params, preview = false }) {
-  const product = await getClient(preview).fetch(postQuery, {
+export async function getStaticProps({ params }) {
+  const product = await getClient().fetch(postQuery, {
     slug: params.slug,
   });
 
   return {
     props: {
-      preview,
       data: { product },
     },
   };

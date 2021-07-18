@@ -8,6 +8,7 @@ export default function ReadPost({ data }) {
   if (router.isFallback) {
     return <div>Loading...</div>;
   }
+
   const { post } = data;
   return (
     <article>
@@ -37,20 +38,36 @@ export async function getStaticPaths() {
     groq`*[_type == "post" && defined(slug.current)][].slug.current`
   );
 
+  const firstPost = paths[0];
+
+  /* 
+  console.log(paths); 
+  -----------------------------
+  [
+  'large-sites-with-odb',
+  'jamstack-for-enterprise-applications',
+  'next-on-netlify',
+  'dynamic-jamstack-sites-in-2021',
+  'modern-faster-netlify-functions',
+  'deep-dive-into-the-vue-composition-api-s-watch-method',
+  'how-to-rollback-a-deploy-in-2-seconds-on-netlify'
+]
+  */
+
   return {
-    paths: paths.map((slug) => ({ params: { slug } })),
+    // paths: paths.map((slug) => ({ params: { slug } })),
+    paths: [{ params: { slug: firstPost } }],
     fallback: true,
   };
 }
 
-export async function getStaticProps({ params, preview = false }) {
-  const post = await getClient(preview).fetch(postQuery, {
+export async function getStaticProps({ params }) {
+  const post = await getClient().fetch(postQuery, {
     slug: params.slug,
   });
 
   return {
     props: {
-      preview,
       data: { post },
     },
   };
