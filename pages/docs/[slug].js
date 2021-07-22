@@ -6,9 +6,8 @@ export default function ReadDoc({ data }) {
   const router = useRouter();
 
   if (router.isFallback) {
-    return <p>Loading...</p>;
+    return <div>Loading...</div>;
   }
-
   const { docs } = data;
   return (
     <article>

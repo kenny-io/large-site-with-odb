@@ -1,8 +1,7 @@
 import { groq } from "next-sanity";
 import { getClient } from "../../lib/sanity.server";
-import { useRouter } from "next/router";
 import Image from "next/image";
-
+import { useRouter } from "next/router";
 export default function ProductDetails({ data }) {
   const router = useRouter();
 
@@ -205,8 +204,8 @@ export async function getStaticPaths() {
   const firstProduct = paths[0];
 
   return {
-    // paths: paths.map((slug) => ({ params: { slug } })),
     paths: [{ params: { slug: firstProduct } }],
+    // paths: paths.map((slug) => ({ params: { slug } })),
     fallback: true,
   };
 }

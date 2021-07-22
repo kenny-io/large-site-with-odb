@@ -1,6 +1,6 @@
-import { useRouter } from "next/router";
 import { groq } from "next-sanity";
 import { getClient } from "../../lib/sanity.server";
+import { useRouter } from "next/router";
 
 export default function ReadPost({ data }) {
   const router = useRouter();
@@ -8,7 +8,6 @@ export default function ReadPost({ data }) {
   if (router.isFallback) {
     return <div>Loading...</div>;
   }
-
   const { post } = data;
   return (
     <article>
